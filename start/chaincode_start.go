@@ -41,9 +41,8 @@ func main() {
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
-	}
-	if else len(args) === 1 {
-		stub.PutState("property1", []byte(args[0]))
+	} else if len(args) == 1 {
+		stub.PutState("owner", []byte(args[0]))
 	}
 
 	return nil, nil
@@ -56,8 +55,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	// Handle different functions
 	if function == "init" {													//initialize the chaincode state, used as reset
 		return t.Init(stub, "init", args)
-	}
-	if else function == "changeOwner" {
+	} else if function == "changeOwner" {
 		return t.changeOwner(stub, args);
 	}
 	fmt.Println("invoke did not find func: " + function)					//error
@@ -89,7 +87,7 @@ func (t *SimpleChaincode) changeOwner(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of asset, new owner")
 	}
 
-	asset = args[0] //the asset
+	asset = args[0] //the asset ""
 	//currentowner = args[1]
 	newowner = args[1] //new owner
 	err = stub.PutState(asset, []byte(newowner))
