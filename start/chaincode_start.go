@@ -42,6 +42,9 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
+	if else len(args) === 1 {
+		stub.PutState("property1", []byte(args[0]))
+	}
 
 	return nil, nil
 }
@@ -53,6 +56,9 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	// Handle different functions
 	if function == "init" {													//initialize the chaincode state, used as reset
 		return t.Init(stub, "init", args)
+	}
+	if else function == "changeOwner" {
+		return t.changeOwner(stub, args);
 	}
 	fmt.Println("invoke did not find func: " + function)					//error
 
@@ -90,6 +96,6 @@ func (t *SimpleChaincode) changeOwner(stub shim.ChaincodeStubInterface, args []s
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return nil, nil
 }
